@@ -91,7 +91,18 @@ Creature::Creature(string filename)
 		tempstream.str(string());
 		tempstream.clear();
 		tok.clear();
-	
+		getline(file, temp, '\n');
+		tempstream.str(temp);
+		while (getline(tempstream, tok, ','))
+		{
+			misc_tags_m.push_back(tok);
+		}
+		tempstream.str(string());
+		tempstream.clear();
+		tok.clear();
+		getline(file, temp, '$');
+		description_m = temp;
+
 	}
 	else
 	{
@@ -146,7 +157,7 @@ void Creature::ShowTags()
 			cout << tag << ", ";
 		}
 	}
-	cout << "\n\nMisc Tags: \n";
+	cout << "\nMisc Tags: \n";
 	for (string tag : misc_tags_m)
 	{
 		if (misc_tags_m.back() == tag)
