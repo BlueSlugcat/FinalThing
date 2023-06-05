@@ -120,15 +120,102 @@ Creature::Creature(string filename)
 		misc_tags_m.push_back("none");
 		description_m = "default";
 	}
+}
 
+Creature::Creature(const Creature& original)
+{
+	hp_current_m = original.hp_current_m;
+	hp_max_m = original.hp_max_m;
+	attack_m = original.attack_m;
+	attack_tags_m = original.attack_tags_m;
+	defense_m = original.defense_m;
+	defense_tags_m = original.defense_tags_m;
+	misc_tags_m = original.misc_tags_m;
+	description_m = original.description_m;
+}
 
+Creature& Creature::operator=(const Creature& original)
+{
+	if (this != &original)
+	{
+		hp_current_m = original.hp_current_m;
+		hp_max_m = original.hp_max_m;
+		attack_m = original.attack_m;
+		attack_tags_m = original.attack_tags_m;
+		defense_m = original.defense_m;
+		defense_tags_m = original.defense_tags_m;
+		misc_tags_m = original.misc_tags_m;
+		description_m = original.description_m;
+	}
+
+	return *this;
+}
+
+Creature::Creature(Creature&& thing) noexcept : hp_current_m(thing.hp_current_m), hp_max_m(thing.hp_max_m), attack_m(thing.attack_m), attack_tags_m(thing.attack_tags_m),
+defense_m(thing.defense_m), defense_tags_m(thing.defense_tags_m), misc_tags_m(thing.misc_tags_m), description_m(thing.description_m)
+{
+	thing.hp_current_m = NULL;
+	thing.hp_max_m = NULL;
+	thing.attack_m = NULL;
+	thing.attack_tags_m.clear();
+	thing.defense_m = NULL;
+	thing.defense_tags_m.clear();
+	thing.misc_tags_m.clear();
+	thing.description_m.clear();
 
 }
 
+Creature& Creature::operator=(Creature&& thing) noexcept 
+{
+	if (this != &thing)
+	{
+		hp_current_m = thing.hp_current_m;
+		hp_max_m = thing.hp_max_m;
+		attack_m = thing.attack_m;
+		attack_tags_m = thing.attack_tags_m;
+		defense_m = thing.defense_m;
+		defense_tags_m = thing.defense_tags_m;
+		misc_tags_m = thing.misc_tags_m;
+		description_m = thing.description_m;
+	}
+	thing.hp_current_m = NULL;
+	thing.hp_max_m = NULL;
+	thing.attack_m = NULL;
+	thing.attack_tags_m.clear();
+	thing.defense_m = NULL;
+	thing.defense_tags_m.clear();
+	thing.misc_tags_m.clear();
+	thing.description_m.clear();
 
+	return *this;
+}
 
 Creature::~Creature()
 {}
+
+void Creature::Attack(Creature& target)
+{
+
+}
+
+Creature& Creature::TakeDamage(int attack, vector<string> aTags)
+{
+	int actualdamage = attack - defense_m;
+	if ((hp_current_m - actualdamage) < 0)
+	{
+		hp_current_m = 0;
+	}
+	else
+	{
+		hp_current_m -= actualdamage;
+	}
+	return *this;
+}
+
+void Creature::Describe()
+{
+	cout << description_m << endl;
+}
 
 
 
