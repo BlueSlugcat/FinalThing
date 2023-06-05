@@ -8,7 +8,7 @@ int main()
 {
     Creature test;
     //test.ShowTags();
-    Creature filetest("C:\\creaturefiles\\test.txt");
+    Creature filetest("testcreature.txt");
     filetest.ShowTags();
 }
 

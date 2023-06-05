@@ -103,6 +103,8 @@ Creature::Creature(string filename)
 		getline(file, temp, '$');
 		description_m = temp;
 
+		file.close();
+
 	}
 	else
 	{
