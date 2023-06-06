@@ -140,6 +140,7 @@
     <Text Include="testroom.txt" />
     <Text Include="testroom2.txt" />
     <Text Include="testroom3.txt" />
+    <Text Include="testroom4.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

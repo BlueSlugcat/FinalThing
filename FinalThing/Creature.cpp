@@ -9,11 +9,13 @@ Creature::Creature(int hp, int attack, string aTags[], int defense, string dTags
 { 
 	if (hp <= 0)
 	{
-		hp_current_m, hp_max_m = 1;
+		hp_current_m = 1;
+		hp_max_m = 1;
 	}
 	else
 	{
-		hp_current_m, hp_max_m = hp;
+		hp_current_m = hp;
+		hp_max_m = hp;
 	}
 	if (attack < 0)
 	{
