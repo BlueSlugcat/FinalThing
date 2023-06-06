@@ -1,12 +1,36 @@
 #include "Creature.h"
 
 Creature::Creature() : hp_current_m(1), hp_max_m(1), attack_m(1), attack_tags_m({"none", "test"}),
-defense_m(0), defense_tags_m({ "none", "test" }), misc_tags_m({ "none" }), description_m("basic test creature"), pos_m({0,0})
+defense_m(0), defense_tags_m({ "none", "test" }), misc_tags_m({ "none" }), description_m("basic test creature"), pos_m({0,0}), sightrange_m(0)
 {}
 
 Creature::Creature(int hp, int attack, string aTags[], int defense, string dTags[], string mTags[], string descript, int x, int y) :
-	hp_current_m(hp), hp_max_m(hp), attack_m(attack), defense_m(defense), description_m(descript), pos_m({ x, y })
+	description_m(descript), sightrange_m(1), pos_m({ x, y })
 { 
+	if (hp <= 0)
+	{
+		hp_current_m, hp_max_m = 1;
+	}
+	else
+	{
+		hp_current_m, hp_max_m = hp;
+	}
+	if (attack < 0)
+	{
+		attack_m = 1;
+	}
+	else
+	{
+		attack_m = attack;
+	}
+	if (defense < 0)
+	{
+		defense_m = 0;
+	}
+	else
+	{
+		defense_m = defense;
+	}
 	int aTagNum = sizeof(*aTags) / sizeof(aTags[0]);
 	int dTagNum = sizeof(*dTags) / sizeof(dTags[0]);
 	int mTagNum = sizeof(*mTags) / sizeof(mTags[0]);
@@ -24,7 +48,7 @@ Creature::Creature(int hp, int attack, string aTags[], int defense, string dTags
 	}
 }
 
-Creature::Creature(string filename)
+Creature::Creature(string filename, int x, int y)
 {
 	/*
 	* file formating is as follows (order and seperation via new line is important here)
@@ -42,6 +66,7 @@ Creature::Creature(string filename)
 	file.open(filename);
 	if (file.is_open())
 	{
+		pos_m = { x, y };
 		string temp;
 		string tok;
 		getline(file, temp, '\n');
@@ -100,11 +125,18 @@ Creature::Creature(string filename)
 		tempstream.str(string());
 		tempstream.clear();
 		tok.clear();
+		getline(file, temp, '\n');
+		if (stoi(temp) < 0)
+		{
+			sightrange_m = 1;//same situation with attack val
+		}
+		else
+		{
+			sightrange_m = stoi(temp);
+		}
 		getline(file, temp, '$');
 		description_m = temp;
-
 		file.close();
-
 	}
 	else
 	{
@@ -119,6 +151,8 @@ Creature::Creature(string filename)
 		defense_tags_m.push_back("none");
 		misc_tags_m.push_back("none");
 		description_m = "default";
+		sightrange_m = 1;
+		pos_m = { 0, 0 };
 	}
 }
 
@@ -132,6 +166,7 @@ Creature::Creature(const Creature& original)
 	defense_tags_m = original.defense_tags_m;
 	misc_tags_m = original.misc_tags_m;
 	description_m = original.description_m;
+	sightrange_m = original.sightrange_m;
 }
 
 Creature& Creature::operator=(const Creature& original)
@@ -146,13 +181,14 @@ Creature& Creature::operator=(const Creature& original)
 		defense_tags_m = original.defense_tags_m;
 		misc_tags_m = original.misc_tags_m;
 		description_m = original.description_m;
+		sightrange_m = original.sightrange_m;
 	}
 
 	return *this;
 }
 
 Creature::Creature(Creature&& thing) noexcept : hp_current_m(thing.hp_current_m), hp_max_m(thing.hp_max_m), attack_m(thing.attack_m), attack_tags_m(thing.attack_tags_m),
-defense_m(thing.defense_m), defense_tags_m(thing.defense_tags_m), misc_tags_m(thing.misc_tags_m), description_m(thing.description_m)
+defense_m(thing.defense_m), defense_tags_m(thing.defense_tags_m), misc_tags_m(thing.misc_tags_m), description_m(thing.description_m), sightrange_m(thing.sightrange_m)
 {
 	thing.hp_current_m = NULL;
 	thing.hp_max_m = NULL;
@@ -162,6 +198,7 @@ defense_m(thing.defense_m), defense_tags_m(thing.defense_tags_m), misc_tags_m(th
 	thing.defense_tags_m.clear();
 	thing.misc_tags_m.clear();
 	thing.description_m.clear();
+	thing.sightrange_m = NULL;
 
 }
 
@@ -177,6 +214,7 @@ Creature& Creature::operator=(Creature&& thing) noexcept
 		defense_tags_m = thing.defense_tags_m;
 		misc_tags_m = thing.misc_tags_m;
 		description_m = thing.description_m;
+		sightrange_m = thing.sightrange_m;
 	}
 	thing.hp_current_m = NULL;
 	thing.hp_max_m = NULL;
@@ -186,6 +224,7 @@ Creature& Creature::operator=(Creature&& thing) noexcept
 	thing.defense_tags_m.clear();
 	thing.misc_tags_m.clear();
 	thing.description_m.clear();
+	thing.sightrange_m = NULL;
 
 	return *this;
 }

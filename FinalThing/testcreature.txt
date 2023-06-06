@@ -4,4 +4,5 @@ normal, blunt, unarmed
 0
 normal, unarmored
 boring, uninteresting, dumb
+3
 A boring and unremarkable creature. disappointingly average.$

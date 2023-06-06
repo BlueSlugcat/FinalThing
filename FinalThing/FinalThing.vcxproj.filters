@@ -21,13 +21,22 @@
     <ClCompile Include="Creature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Dungeon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Creature.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Dungeon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="testcreature.txt" />
+    <Text Include="testroom.txt" />
+    <Text Include="testroom2.txt" />
+    <Text Include="testroom3.txt" />
   </ItemGroup>
 </Project>

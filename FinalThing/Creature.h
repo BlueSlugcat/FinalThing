@@ -22,11 +22,12 @@ protected:
 	vector<string> defense_tags_m;
 	vector<string> misc_tags_m;
 	string description_m;
+	size_t sightrange_m;
 	vector<int> pos_m;
 public:
 	Creature();
 	Creature(int hp, int attack, string aTags[], int defense, string dTags[], string mTags[], string description, int x, int y);//arg ctor
-	Creature(string filename);//allows for creature values to be read from preset files
+	Creature(string filename, int x, int y);//allows for creature values to be read from preset files
 	Creature(const Creature& original);//copy ctor
 	Creature& operator=(const Creature& original);//copy op
 	Creature(Creature&& thing) noexcept;//move ctor
