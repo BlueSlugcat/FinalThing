@@ -39,5 +39,6 @@
     <Text Include="testroom2.txt" />
     <Text Include="testroom3.txt" />
     <Text Include="testroom4.txt" />
+    <Text Include="truedungeon.txt" />
   </ItemGroup>
 </Project>

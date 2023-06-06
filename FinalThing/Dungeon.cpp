@@ -3,7 +3,7 @@
 Dungeon::Dungeon()
 {
 	//testroom and testroom3 will work, testroom2 and 4 are there to test error flags
-	fstream test("testroom.txt");
+	fstream test("trueDungeon.txt");
 	string line;
 	string tok;
 	size_t flag{};

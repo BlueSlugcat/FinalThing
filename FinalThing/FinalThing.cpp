@@ -4,7 +4,8 @@
 #include <iostream>
 #include "Creature.h"
 #include "Dungeon.h"
-
+//add actual game director
+//add graphical system/updater
 
 int main()
 {
