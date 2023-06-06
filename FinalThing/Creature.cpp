@@ -1,11 +1,11 @@
 #include "Creature.h"
 
 Creature::Creature() : hp_current_m(1), hp_max_m(1), attack_m(1), attack_tags_m({"none", "test"}),
-defense_m(0), defense_tags_m({ "none", "test" }), misc_tags_m({ "none" }), description_m("basic test creature")
+defense_m(0), defense_tags_m({ "none", "test" }), misc_tags_m({ "none" }), description_m("basic test creature"), pos_m({0,0})
 {}
 
-Creature::Creature(int hp, int attack, string aTags[], int defense, string dTags[], string mTags[], string descript) :
-	hp_current_m(hp), hp_max_m(hp), attack_m(attack), defense_m(defense), description_m(descript)
+Creature::Creature(int hp, int attack, string aTags[], int defense, string dTags[], string mTags[], string descript, int x, int y) :
+	hp_current_m(hp), hp_max_m(hp), attack_m(attack), defense_m(defense), description_m(descript), pos_m({ x, y })
 { 
 	int aTagNum = sizeof(*aTags) / sizeof(aTags[0]);
 	int dTagNum = sizeof(*dTags) / sizeof(dTags[0]);
