@@ -19,6 +19,7 @@ using std::stringstream;
 class Creature
 {
 protected:
+	string name;
 	vector<int> requested_pos; //if i understood multithreading better i would have likes to have done mid function requests to the directior for a much more 
 	bool detected;
 	vector<int> target_pos_m;
@@ -49,6 +50,8 @@ public:
 	virtual void MoveTrue();
 	void Describe();
 	void ShowTags();
+
+	virtual void SelectLeader(vector<int* [2]> alphaPos); // only here to allow Kobold creation to be streamlined
 
 	friend class Game;
 };
