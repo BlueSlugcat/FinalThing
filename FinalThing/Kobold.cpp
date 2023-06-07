@@ -20,10 +20,10 @@ Kobold::Kobold(size_t isalpha, int x, int y) : Creature("kobold.txt", x, y), alp
 	misc_tags_m.push_back("pack leader");
 }
 
-void Kobold::SelectLeader(vector<int* [2]> alphaPos)
+void Kobold::SelectLeader(vector<vector<int*>> alphaPos)
 {
 	double distance = 1000;
-	int closest;
+	int closest{};
 	int i{};
 	for (auto thing : alphaPos)
 	{

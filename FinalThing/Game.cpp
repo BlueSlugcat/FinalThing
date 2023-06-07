@@ -13,10 +13,12 @@ Game::~Game()
 	}
 }
 
+
+
 Game& Game::PlaceCreatures()
 {
-	vector<int*[2]> alphaPos;
-	int entityamount{};
+	vector<vector<int*>> alphaPos;
+	int alphanum{};
 	activeEntities.clear();
 	for (int y{}; y < dungeon.truesizey; y++)
 	{
@@ -36,18 +38,21 @@ Game& Game::PlaceCreatures()
 			else if (dungeon.map[y][x] == 'K')
 			{
 				activeEntities.push_back(new Kobold(1, x, y)); //if any amount of kobolds are on the map, at least 1 alpha kobold must be among them
-				alphaPos.push_back({ &(activeEntities.back()->pos_m[0]), &(activeEntities.back()->pos_m[1]) });
+				alphanum++;
+				
+				alphaPos.push_back({&(activeEntities.back()->pos_m[0]), &(activeEntities.back()->pos_m[1]) });
+
 				
 			}
 			else if (dungeon.map[y][x] == 'G')
 			{
 				activeEntities.push_back(new Golem(x, y));
-				entityamount++;
+		
 			}
 			else if (dungeon.map[y][x] == 'S')
 			{
 				activeEntities.push_back(new Slime(x, y));
-				entityamount++;
+		;
 			}
 		}
 	}
@@ -60,5 +65,9 @@ Game& Game::PlaceCreatures()
 	}
 	return *this;
 }
+
+void Creature::SelectLeader(vector<vector<int*>> alphaPos)
+{} //this is here because without it the the whole program shits itself
+
 
 

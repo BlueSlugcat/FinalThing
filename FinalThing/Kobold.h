@@ -12,7 +12,7 @@ public:
 	Kobold(int x, int y);
 	Kobold(size_t isalpha, int x, int y);
 	~Kobold();
-	void SelectLeader(vector<int* [2]> alphaPos);
+	void SelectLeader(vector<vector<int*>> alphaPos);
 	void Detect();
 	void MoveChoose();
 	friend class Game;

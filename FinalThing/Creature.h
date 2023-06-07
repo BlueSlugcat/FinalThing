@@ -51,7 +51,7 @@ public:
 	void Describe();
 	void ShowTags();
 
-	virtual void SelectLeader(vector<int* [2]> alphaPos); // only here to allow Kobold creation to be streamlined
+	virtual void SelectLeader(vector<vector<int*>> alphaPos); // only here to allow Kobold creation to be streamlined
 
 	friend class Game;
 };
