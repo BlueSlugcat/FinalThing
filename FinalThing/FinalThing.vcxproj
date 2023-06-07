@@ -131,13 +131,25 @@
     <ClCompile Include="Dungeon.cpp" />
     <ClCompile Include="FinalThing.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Golem.cpp" />
+    <ClCompile Include="Kobold.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Slime.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Creature.h" />
     <ClInclude Include="Dungeon.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Golem.h" />
+    <ClInclude Include="Kobold.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Slime.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="creatures\golem.txt" />
+    <Text Include="creatures\kobold.txt" />
+    <Text Include="creatures\Player.txt" />
+    <Text Include="creatures\slime.txt" />
     <Text Include="creatures\testcreature.txt" />
     <Text Include="testroom.txt" />
     <Text Include="testroom2.txt" />

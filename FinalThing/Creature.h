@@ -14,6 +14,8 @@ using std::stringstream;
 class Creature
 {
 protected:
+	bool detected;
+	vector<int> target_pos_m;
 	int hp_current_m;
 	int hp_max_m;
 	int attack_m;
@@ -33,12 +35,13 @@ public:
 	Creature(Creature&& thing) noexcept;//move ctor
 	Creature& operator=(Creature&& thing) noexcept;//move op
 	virtual ~Creature();
-	void Attack(Creature& target);
-	Creature& TakeDamage(int attack, vector<string> aTags);
+	virtual void Detect();
+	virtual void Attack(Creature& target);
+	virtual Creature& TakeDamage(int attack, vector<string> aTags);
 	void Describe();
 	void ShowTags();
 
-
+	friend class Game;
 
 
 };

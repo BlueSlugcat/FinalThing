@@ -27,6 +27,18 @@
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Kobold.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Golem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Slime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Creature.h">
@@ -36,6 +48,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Kobold.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Golem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Slime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -48,5 +72,9 @@
     <Text Include="dungeon\truedungeon2.txt" />
     <Text Include="dungeon\truedungeon3.txt" />
     <Text Include="creatures\testcreature.txt" />
+    <Text Include="creatures\kobold.txt" />
+    <Text Include="creatures\golem.txt" />
+    <Text Include="creatures\slime.txt" />
+    <Text Include="creatures\Player.txt" />
   </ItemGroup>
 </Project>

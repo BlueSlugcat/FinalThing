@@ -1,0 +1,8 @@
+5
+2
+Fists,blunt
+2
+cloth
+normal
+0
+You.$

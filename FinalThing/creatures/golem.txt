@@ -1,0 +1,9 @@
+15
+6
+Bolder fists,blunt
+6
+Stoneskin
+Artificial,territorial
+3
+A mobile mass of enchanted stone. Placed here as a sentinel by unknown creators.
+Strikes by launching and recalling the boulders that make up its body. Extremely territorial.$

@@ -1,11 +1,11 @@
 #include "Creature.h"
 
-Creature::Creature() : hp_current_m(1), hp_max_m(1), attack_m(1), attack_tags_m({"none", "test"}),
+Creature::Creature() : detected(false), target_pos_m({ 0,0 }), hp_current_m(1), hp_max_m(1), attack_m(1), attack_tags_m({"none", "test"}),
 defense_m(0), defense_tags_m({ "none", "test" }), misc_tags_m({ "none" }), description_m("basic test creature"), pos_m({0,0}), sightrange_m(0)
 {}
 
 Creature::Creature(int hp, int attack, string aTags[], int defense, string dTags[], string mTags[], string descript, int x, int y) :
-	description_m(descript), sightrange_m(1), pos_m({ x, y })
+	detected(false), target_pos_m({ 0,0 }), description_m(descript), sightrange_m(1), pos_m({ x, y })
 { 
 	if (hp <= 0)
 	{
@@ -50,17 +50,18 @@ Creature::Creature(int hp, int attack, string aTags[], int defense, string dTags
 	}
 }
 
-Creature::Creature(string filename, int x, int y)
+Creature::Creature(string filename, int x, int y): detected(false), target_pos_m({ 0, 0 })
 {
 	/*
 	* file formating is as follows (order and seperation via new line is important here)
 	* //starts at hp
 	* hp (this is for both current and max, so just one number)
-	* attack value (just a number >= 0) //allowing for attack of 0 could open the door for indirect damage or status effect enemies
+	* attack value (just a whole number >= 0) //allowing for attack of 0 could open the door for indirect damage or status effect enemies
 	* attack tags (seperated by ',' for mutiple tags)
-	* defense value (just a number >= 0)
+	* defense value (just a whole number >= 0)
 	* defense tags (seperated by ',' for multiple tags)
 	* misc tags (seperated by ',' for multiple tags) // these are for flavor tags, IE tags like "smelly", or things that don't have any real effect on gameplay
+	* sight range: (just a whole number > 0) //can't make blind creatures in this system, but can make short sighted ones
 	* description (can be a multi-line description, but must be ended by this specific character: $
 	*/
 
@@ -158,7 +159,7 @@ Creature::Creature(string filename, int x, int y)
 	}
 }
 
-Creature::Creature(const Creature& original)
+Creature::Creature(const Creature& original) : detected(false), target_pos_m({0,0})
 {
 	hp_current_m = original.hp_current_m;
 	hp_max_m = original.hp_max_m;
@@ -189,7 +190,7 @@ Creature& Creature::operator=(const Creature& original)
 	return *this;
 }
 
-Creature::Creature(Creature&& thing) noexcept : hp_current_m(thing.hp_current_m), hp_max_m(thing.hp_max_m), attack_m(thing.attack_m), attack_tags_m(thing.attack_tags_m),
+Creature::Creature(Creature&& thing) noexcept : detected(false), target_pos_m({ 0, 0 }), hp_current_m(thing.hp_current_m), hp_max_m(thing.hp_max_m), attack_m(thing.attack_m), attack_tags_m(thing.attack_tags_m),
 defense_m(thing.defense_m), defense_tags_m(thing.defense_tags_m), misc_tags_m(thing.misc_tags_m), description_m(thing.description_m), sightrange_m(thing.sightrange_m)
 {
 	thing.hp_current_m = NULL;
@@ -233,6 +234,30 @@ Creature& Creature::operator=(Creature&& thing) noexcept
 
 Creature::~Creature()
 {}
+
+void Creature::Detect()
+{
+	bool flag = false;
+	for (int y = 1; y < (sightrange_m + 1); y++)
+	{
+		for (int x = 1; x < sightrange_m + 1; x++)
+		{
+			if ((pos_m[0] - x) == target_pos_m[0] && (pos_m[1] - y) == target_pos_m[1])
+			{
+				flag = true;
+			}
+		}
+	}
+
+	if (flag == true)
+	{
+		detected = true;
+	}
+	else
+	{
+		detected = false;
+	}
+}
 
 void Creature::Attack(Creature& target)
 {

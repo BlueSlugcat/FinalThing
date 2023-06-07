@@ -1,0 +1,9 @@
+6
+3
+spear,pierce
+2
+cold blooded,scaled
+short,darksight,reptilian
+4
+A short, reptilian humanoid. Cave dwellers by nature, they are quite attuned to the enviroment,
+using their dark sight to hunt prey. Kobolds prefer hunting in packs, so keep an eye out when engaging one on its own.$
