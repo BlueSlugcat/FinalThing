@@ -11,6 +11,8 @@ Game::~Game()
 	{
 		delete item;
 	}
+	delete dungeon;
+	cout << "Game dtor" << endl;
 }
 
 
@@ -20,22 +22,22 @@ Game& Game::PlaceCreatures()
 	vector<vector<int*>> alphaPos;
 	int alphanum{};
 	activeEntities.clear();
-	for (int y{}; y < dungeon.truesizey; y++)
+	for (int y{}; y < dungeon->truesizey; y++)
 	{
-		for (int x{}; x < dungeon.truesizex; x++)
+		for (int x{}; x < dungeon->truesizex; x++)
 		{
-			if (dungeon.map[y][x] == '@')//i know the y then x looks strange, how do you think i feel trying to do the mental gymnastics to make this work
+			if (dungeon->map[y][x] == '@')//i know the y then x looks strange, how do you think i feel trying to do the mental gymnastics to make this work
 			{
 				activeEntities.insert(activeEntities.begin(), new Player(x, y)); // this will ALWAYS place the player at the start of the list, making it so the player acts first 
 				player_pos = { x, y };
 			
 			}
-			else if (dungeon.map[y][x] == 'k')
+			else if (dungeon->map[y][x] == 'k')
 			{
 				activeEntities.push_back(new Kobold(x, y));
 			
 			}
-			else if (dungeon.map[y][x] == 'K')
+			else if (dungeon->map[y][x] == 'K')
 			{
 				activeEntities.push_back(new Kobold(1, x, y)); //if any amount of kobolds are on the map, at least 1 alpha kobold must be among them
 				alphanum++;
@@ -44,12 +46,12 @@ Game& Game::PlaceCreatures()
 
 				
 			}
-			else if (dungeon.map[y][x] == 'G')
+			else if (dungeon->map[y][x] == 'G')
 			{
 				activeEntities.push_back(new Golem(x, y));
 		
 			}
-			else if (dungeon.map[y][x] == 'S')
+			else if (dungeon->map[y][x] == 'S')
 			{
 				activeEntities.push_back(new Slime(x, y));
 		;

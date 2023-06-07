@@ -15,7 +15,7 @@ protected:
 	bool gameoverflag;
 	vector<int> player_pos;
 	vector<Creature*> activeEntities;
-	Dungeon dungeon;
+	Dungeon* dungeon;
 public:
 	Game();
 	~Game();

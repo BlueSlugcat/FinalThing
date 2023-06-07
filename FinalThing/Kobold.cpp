@@ -134,4 +134,6 @@ void Kobold::MoveChoose()
 }
 
 Kobold::~Kobold()
-{}
+{
+	cout << "Kobold Dtor" << endl;
+}

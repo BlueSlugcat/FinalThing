@@ -119,6 +119,8 @@ Dungeon::~Dungeon()
 		delete map[i];
 	}
 	delete map;
+
+	cout << "dungeon dtor" << endl;
 }
 
 void Dungeon::display()

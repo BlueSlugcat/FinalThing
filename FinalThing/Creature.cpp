@@ -233,7 +233,9 @@ Creature& Creature::operator=(Creature&& thing) noexcept
 }
 
 Creature::~Creature()
-{}
+{
+	cout << "Creature Dtor" << endl;
+}
 
 void Creature::Detect()
 {

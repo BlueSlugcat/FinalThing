@@ -17,5 +17,7 @@ int main()
     //filetest.ShowTags();
     //Dungeon testroom(1);
     //testroom.display();
+    Game thing;
+    //Kobold steve;
 }
 

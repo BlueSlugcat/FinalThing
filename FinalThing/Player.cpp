@@ -11,4 +11,6 @@ Player::Player(int x, int y) :Creature("Player.txt", x, y)
 }
 
 Player::~Player()
-{}
+{
+	cout << "Player dtor" << endl;
+}
