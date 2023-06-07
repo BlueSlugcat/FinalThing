@@ -5,7 +5,7 @@ defense_m(0), defense_tags_m({ "none", "test" }), misc_tags_m({ "none" }), descr
 {}
 
 Creature::Creature(int hp, int attack, string aTags[], int defense, string dTags[], string mTags[], string descript, int x, int y) :
-	detected(false), target_pos_m({ 0,0 }), description_m(descript), sightrange_m(1), pos_m({ x, y })
+	 detected(false), target_pos_m({ 0,0 }), description_m(descript), sightrange_m(1), pos_m({ x, y })
 { 
 	if (hp <= 0)
 	{
@@ -50,7 +50,7 @@ Creature::Creature(int hp, int attack, string aTags[], int defense, string dTags
 	}
 }
 
-Creature::Creature(string filename, int x, int y): detected(false), target_pos_m({ 0, 0 })
+Creature::Creature(string filename, int x, int y) : detected(false), target_pos_m({ 0, 0 })
 {
 	/*
 	* file formating is as follows (order and seperation via new line is important here)
@@ -159,7 +159,7 @@ Creature::Creature(string filename, int x, int y): detected(false), target_pos_m
 	}
 }
 
-Creature::Creature(const Creature& original) : detected(false), target_pos_m({0,0})
+Creature::Creature(const Creature& original) :  detected(false), target_pos_m({0,0})
 {
 	hp_current_m = original.hp_current_m;
 	hp_max_m = original.hp_max_m;
@@ -190,7 +190,7 @@ Creature& Creature::operator=(const Creature& original)
 	return *this;
 }
 
-Creature::Creature(Creature&& thing) noexcept : detected(false), target_pos_m({ 0, 0 }), hp_current_m(thing.hp_current_m), hp_max_m(thing.hp_max_m), attack_m(thing.attack_m), attack_tags_m(thing.attack_tags_m),
+Creature::Creature(Creature&& thing) noexcept :  detected(false), target_pos_m({ 0, 0 }), hp_current_m(thing.hp_current_m), hp_max_m(thing.hp_max_m), attack_m(thing.attack_m), attack_tags_m(thing.attack_tags_m),
 defense_m(thing.defense_m), defense_tags_m(thing.defense_tags_m), misc_tags_m(thing.misc_tags_m), description_m(thing.description_m), sightrange_m(thing.sightrange_m)
 {
 	thing.hp_current_m = NULL;
@@ -261,10 +261,10 @@ void Creature::Detect()
 
 void Creature::Attack(Creature& target)
 {
-
+	target.TakeDamage(attack_m, attack_tags_m);
 }
 
-Creature& Creature::TakeDamage(int attack, vector<string> aTags)
+void Creature::TakeDamage(int attack, vector<string> aTags)
 {
 	int actualdamage = attack - defense_m;
 	if ((hp_current_m - actualdamage) < 0)
@@ -275,15 +275,50 @@ Creature& Creature::TakeDamage(int attack, vector<string> aTags)
 	{
 		hp_current_m -= actualdamage;
 	}
-	return *this;
+}
+
+void Creature::MoveChoose() //basic creatures will wander randomly unless player is detected
+{
+	if (detected == true)
+	{
+		if (target_pos_m[0] > pos_m[0])
+		{
+			requested_pos[0] = pos_m[0] + 1;
+		}
+		else if (target_pos_m[0] < pos_m[0])
+		{
+			requested_pos[0] = pos_m[0] - 1;
+		}
+		if (target_pos_m[1] > pos_m[1])
+		{
+			requested_pos[1] = pos_m[1] + 1;
+		}
+		else if (target_pos_m[1] < pos_m[1])
+		{
+			requested_pos[1] = pos_m[1] - 1;
+		}
+	}
+	else 
+	{
+		srand(time(NULL));
+		int xchange = (rand() % 1 - 1);
+		srand(time(NULL));
+		int ychange = (rand() % 1 - 1);
+		requested_pos[0] = pos_m[0] + xchange;
+		requested_pos[1] = pos_m[1] + ychange;
+	}
+}
+
+void Creature::MoveTrue() 
+{
+	pos_m = move(requested_pos);
+	requested_pos.resize(2);
 }
 
 void Creature::Describe()
 {
 	cout << description_m << endl;
 }
-
-
 
 void Creature::ShowTags()
 {

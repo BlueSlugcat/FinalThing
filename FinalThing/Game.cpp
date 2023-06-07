@@ -1,8 +1,8 @@
 #include "Game.h"
 
-Game::Game() : idolflag(true), dooropen(false), winflag(false), gameoverflag(false), dungeon(new Dungeon(1)), activeEntities({Creature()})
+Game::Game() : idolflag(true), dooropen(false), winflag(false), gameoverflag(false), dungeon(new Dungeon(true)), activeEntities({Creature()})
 {
-	this->PlaceCreatures();
+	PlaceCreatures();
 }
 
 Game::~Game()
@@ -17,9 +17,10 @@ Game& Game::PlaceCreatures()
 	{
 		for (int x{}; x < dungeon.truesizex; x++)
 		{
-			if (dungeon.map[y][x] == '@')
+			if (dungeon.map[y][x] == '@')//i know the y then x looks strange, how do you think i feel trying to do the mental gymnastics to make this work
 			{
-				activeEntities.push_back(Player(x, y));
+				activeEntities.insert(activeEntities.begin(), Player(x, y)); // this will ALWAYS place the player at the start of the list, making it so the player acts first 
+				player_pos = { x, y };
 			}
 			else if (dungeon.map[y][x] == 'k')
 			{
@@ -39,6 +40,7 @@ Game& Game::PlaceCreatures()
 			}
 		}
 	}
+	return *this;
 }
 
 

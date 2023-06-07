@@ -9,6 +9,7 @@
 class Game
 {
 protected:
+	vector<int[2]> tile_replace_list;
 	bool idolflag;
 	bool dooropen;
 	bool winflag;
@@ -20,6 +21,7 @@ public:
 	Game();
 	~Game();
 	void UpdateScreen();
+	void MovePhase();
 	Game& PlaceCreatures();
 	void WinCheck();
 	void GameOverCheck();

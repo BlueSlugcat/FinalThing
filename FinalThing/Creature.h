@@ -5,6 +5,11 @@
 #include <vector>
 #include <sstream>
 #include <string>
+#include <time.h>
+#include <stdlib.h>
+using std::time;
+using std::srand;
+using std::rand;
 using std::cout;
 using std::endl;
 using std::string;
@@ -14,6 +19,7 @@ using std::stringstream;
 class Creature
 {
 protected:
+	vector<int> requested_pos; //if i understood multithreading better i would have likes to have done mid function requests to the directior for a much more 
 	bool detected;
 	vector<int> target_pos_m;
 	int hp_current_m;
@@ -37,12 +43,13 @@ public:
 	virtual ~Creature();
 	virtual void Detect();
 	virtual void Attack(Creature& target);
-	virtual Creature& TakeDamage(int attack, vector<string> aTags);
+	virtual void TakeDamage(int attack, vector<string> aTags);
+	virtual void MoveChoose();//determines next move, seperated from actually applying it so the game director can check the requested position
+							  // then approve/deny the request(and re-run the function) or tell the creature to attack if the player/a hostile creature is in that position 
+	virtual void MoveTrue();
 	void Describe();
 	void ShowTags();
 
 	friend class Game;
-
-
 };
 #endif
