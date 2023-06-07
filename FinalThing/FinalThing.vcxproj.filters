@@ -24,6 +24,9 @@
     <ClCompile Include="Dungeon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Creature.h">
@@ -32,13 +35,18 @@
     <ClInclude Include="Dungeon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="testcreature.txt" />
     <Text Include="testroom.txt" />
     <Text Include="testroom2.txt" />
     <Text Include="testroom3.txt" />
     <Text Include="testroom4.txt" />
-    <Text Include="truedungeon.txt" />
+    <Text Include="dungeon\truedungeon.txt" />
+    <Text Include="dungeon\truedungeon2.txt" />
+    <Text Include="dungeon\truedungeon3.txt" />
+    <Text Include="creatures\testcreature.txt" />
   </ItemGroup>
 </Project>

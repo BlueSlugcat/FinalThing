@@ -130,18 +130,22 @@
     <ClCompile Include="Creature.cpp" />
     <ClCompile Include="Dungeon.cpp" />
     <ClCompile Include="FinalThing.cpp" />
+    <ClCompile Include="Game.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Creature.h" />
     <ClInclude Include="Dungeon.h" />
+    <ClInclude Include="Game.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="testcreature.txt" />
+    <Text Include="creatures\testcreature.txt" />
     <Text Include="testroom.txt" />
     <Text Include="testroom2.txt" />
     <Text Include="testroom3.txt" />
     <Text Include="testroom4.txt" />
-    <Text Include="truedungeon.txt" />
+    <Text Include="dungeon\truedungeon.txt" />
+    <Text Include="dungeon\truedungeon2.txt" />
+    <Text Include="dungeon\truedungeon3.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

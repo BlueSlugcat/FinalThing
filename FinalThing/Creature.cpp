@@ -65,7 +65,7 @@ Creature::Creature(string filename, int x, int y)
 	*/
 
 	fstream file;
-	file.open(filename);
+	file.open("creatures\\" + filename);
 	if (file.is_open())
 	{
 		pos_m = { x, y };
