@@ -19,6 +19,7 @@ using std::stringstream;
 class Creature
 {
 protected:
+	bool status; //true = alive, false = dead
 	string name;
 	vector<int> requested_pos; //if i understood multithreading better i would have likes to have done mid function requests to the directior for a much more 
 	bool detected;
@@ -50,6 +51,7 @@ public:
 	virtual void MoveTrue();
 	void Describe();
 	void ShowTags();
+	 vector<int> ReturnPos();
 
 	virtual void SelectLeader(vector<vector<int*>> alphaPos); // only here to allow Kobold creation to be streamlined
 

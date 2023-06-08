@@ -5,10 +5,12 @@
 #include "Kobold.h"
 #include "Golem.h"
 #include "Slime.h"
+
 class Game
 {
 protected:
-	vector<int[2]> tile_replace_list;
+	vector<vector<int>> tile_replace_list;
+	bool endflag;
 	bool idolflag;
 	bool dooropen;
 	bool winflag;
@@ -21,10 +23,11 @@ public:
 	~Game();
 	void UpdateScreen();
 	void MovePhase();
-	Game& PlaceCreatures();
-	void WinCheck();
-	void GameOverCheck();
-	void IdolCheck();
+	void DeadCheck();
+	void PlaceCreatures();
+	//void WinCheck();
+	//void GameOverCheck();
+	//void IdolCheck();
 	void Run();
 };
 #endif

@@ -1,10 +1,10 @@
 #include "Creature.h"
 
-Creature::Creature() : name ("Creature"),detected(false), target_pos_m({0,0}), hp_current_m(1), hp_max_m(1), attack_m(1), attack_tags_m({"none", "test"}),
+Creature::Creature() : status(true), name ("Creature"),detected(false), target_pos_m({0,0}), hp_current_m(1), hp_max_m(1), attack_m(1), attack_tags_m({"none", "test"}),
 defense_m(0), defense_tags_m({ "none", "test" }), misc_tags_m({ "none" }), description_m("basic test creature"), pos_m({0,0}), sightrange_m(0)
 {}
 
-Creature::Creature(int hp, int attack, string aTags[], int defense, string dTags[], string mTags[], string descript, int x, int y) :
+Creature::Creature(int hp, int attack, string aTags[], int defense, string dTags[], string mTags[], string descript, int x, int y) : status(true),
 	name("Creature"), detected(false), target_pos_m({ 0,0 }), description_m(descript), sightrange_m(1), pos_m({ x, y })
 { 
 	if (hp <= 0)
@@ -50,7 +50,7 @@ Creature::Creature(int hp, int attack, string aTags[], int defense, string dTags
 	}
 }
 
-Creature::Creature(string filename, int x, int y) : detected(false), target_pos_m({ 0, 0 })
+Creature::Creature(string filename, int x, int y) : requested_pos({ 0,0 }), detected(false), target_pos_m({ 0, 0 }), status(true)
 {
 	/*
 	* file formating is as follows (order and seperation via new line is important here)
@@ -155,7 +155,7 @@ Creature::Creature(string filename, int x, int y) : detected(false), target_pos_
 		misc_tags_m.push_back("none");
 		description_m = "default";
 		sightrange_m = 1;
-		pos_m = { 0, 0 };
+		pos_m = { 1, 1 };
 	}
 }
 
@@ -190,8 +190,8 @@ Creature& Creature::operator=(const Creature& original)
 	return *this;
 }
 
-Creature::Creature(Creature&& thing) noexcept :  detected(false), target_pos_m({ 0, 0 }), hp_current_m(thing.hp_current_m), hp_max_m(thing.hp_max_m), attack_m(thing.attack_m), attack_tags_m(thing.attack_tags_m),
-defense_m(thing.defense_m), defense_tags_m(thing.defense_tags_m), misc_tags_m(thing.misc_tags_m), description_m(thing.description_m), sightrange_m(thing.sightrange_m)
+Creature::Creature(Creature&& thing) noexcept : detected(false), target_pos_m({ 0, 0 }), hp_current_m(thing.hp_current_m), hp_max_m(thing.hp_max_m), attack_m(thing.attack_m), attack_tags_m(thing.attack_tags_m),
+defense_m(thing.defense_m), defense_tags_m(thing.defense_tags_m), misc_tags_m(thing.misc_tags_m), description_m(thing.description_m), sightrange_m(thing.sightrange_m) , status(true)
 {
 	thing.hp_current_m = NULL;
 	thing.hp_max_m = NULL;
@@ -237,7 +237,7 @@ Creature::~Creature()
 	cout << "Creature Dtor" << endl;
 }
 
-void Creature::Detect()
+void Creature::Detect() //given I have enough time, I would like to modify Detect for Creature and its Derived classes to have walls block vision 
 {
 	bool flag = false;
 	for (int y = 1; y < (sightrange_m + 1); y++)
@@ -248,10 +248,14 @@ void Creature::Detect()
 			{
 				flag = true;
 			}
+			else if ((pos_m[0] + x) == target_pos_m[0] && (pos_m[1] + y) == target_pos_m[1])
+			{
+				flag = true;
+			}
 		}
 	}
 
-	if (flag == true)
+	if (flag)
 	{
 		detected = true;
 	}
@@ -269,19 +273,26 @@ void Creature::Attack(Creature& target)
 void Creature::TakeDamage(int attack, vector<string> aTags)
 {
 	int actualdamage = attack - defense_m;
-	if ((hp_current_m - actualdamage) < 0)
+	if (actualdamage < 0)
+	{
+		actualdamage = 0;
+	}
+	if ((hp_current_m - actualdamage) <= 0)
 	{
 		hp_current_m = 0;
+		status = false;
+
 	}
 	else
 	{
 		hp_current_m -= actualdamage;
 	}
+	
 }
 
 void Creature::MoveChoose() //basic creatures will wander randomly unless player is detected
 {
-	if (detected == true)
+	if (detected)
 	{
 		if (target_pos_m[0] > pos_m[0])
 		{
@@ -302,19 +313,22 @@ void Creature::MoveChoose() //basic creatures will wander randomly unless player
 	}
 	else 
 	{
+
+		
 		srand(time(NULL));
-		int xchange = (rand() % 1 - 1);
-		srand(time(NULL));
-		int ychange = (rand() % 1 - 1);
+		int xchange = (rand() % 2 - 1);
+		int ychange = (rand() % 2 - 1);
 		requested_pos[0] = pos_m[0] + xchange;
 		requested_pos[1] = pos_m[1] + ychange;
 	}
+
+
 }
 
 void Creature::MoveTrue() 
 {
-	pos_m = move(requested_pos);
-	requested_pos.resize(2);
+	pos_m[0] = requested_pos[0];
+	pos_m[1] = requested_pos[1];
 }
 
 void Creature::Describe()
@@ -363,3 +377,12 @@ void Creature::ShowTags()
 	}
 		
 }
+
+vector<int> Creature::ReturnPos()
+{
+	return pos_m;
+}
+
+void Creature::SelectLeader(vector<vector<int*>> alphaPos)
+{} //this is here because without it the the whole program shits itself
+

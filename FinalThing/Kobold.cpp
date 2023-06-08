@@ -8,16 +8,20 @@ Kobold::Kobold() : Creature("kobold.txt", 0, 0), alpha(false), in_pack(false), l
 Kobold::Kobold(int x, int y) : Creature("kobold.txt", x, y), alpha(false), in_pack(false)
 {
 	name = "Kobold";
+
 }
 
 Kobold::Kobold(size_t isalpha, int x, int y) : Creature("kobold.txt", x, y), alpha(true), in_pack(true) //kobold alpha will always have in_pack active in order to lead other kobolds
 {
 	name = "Kobold Alpha";
+
 	hp_current_m += 2;
 	hp_max_m += 2;
 	attack_m += 1;
 	defense_m += 1;
 	misc_tags_m.push_back("pack leader");
+	leader_pos.resize(2);
+	leader_pos = { 0,0 };
 }
 
 void Kobold::SelectLeader(vector<vector<int*>> alphaPos)
@@ -34,7 +38,9 @@ void Kobold::SelectLeader(vector<vector<int*>> alphaPos)
 		}
 		i++;
 	}
-	leader_pos = { &alphaPos[closest][0], &alphaPos[closest][1] };
+	leader_pos.resize(2);
+	leader_pos[0] = *&alphaPos[closest][0];
+	leader_pos[1] = *&alphaPos[closest][1];
 }
 
 void Kobold::Detect()//Kobold has dual purpose detection in order to maintain pack system
@@ -53,11 +59,11 @@ void Kobold::Detect()//Kobold has dual purpose detection in order to maintain pa
 			{
 				flag = true;
 			}
-			if ((pos_m[0] - x) ==  *leader_pos[0] && (pos_m[1] - y) == *leader_pos[1] && !alpha)
+			if (!alpha && ((pos_m[0] - x) ==  *leader_pos[0] && (pos_m[1] - y) == *leader_pos[1]))
 			{
 				packflag = true;
 			}
-			else if ((pos_m[0] + x) == *leader_pos[0] && (pos_m[1] + y) == *leader_pos[1] && !alpha)
+			else if (!alpha && ((pos_m[0] + x) == *leader_pos[0] && (pos_m[1] + y) == *leader_pos[1]))
 			{
 				packflag = true;
 			}
@@ -67,15 +73,15 @@ void Kobold::Detect()//Kobold has dual purpose detection in order to maintain pa
 	{
 		detected = true;
 	}
-	else
+	else if (!flag)
 	{
 		detected = false;
 	}
-	if (packflag)
+	if (!alpha && packflag)
 	{
 		in_pack = true;
 	}
-	else if (!alpha)
+	else if (!alpha && !packflag)
 	{
 		in_pack = false;
 	}
@@ -121,6 +127,10 @@ void Kobold::MoveChoose()
 		{
 			requested_pos[1] = pos_m[1] - 1;
 		}
+		if (requested_pos[0] == *leader_pos[0] && requested_pos[1] == *leader_pos[1])
+		{
+			requested_pos = pos_m;
+		}
 	}
 	else
 	{
@@ -131,6 +141,7 @@ void Kobold::MoveChoose()
 		requested_pos[0] = pos_m[0] + xchange;
 		requested_pos[1] = pos_m[1] + ychange;
 	}
+
 }
 
 Kobold::~Kobold()

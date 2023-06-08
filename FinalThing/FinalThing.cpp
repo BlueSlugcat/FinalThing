@@ -5,6 +5,7 @@
 #include "Creature.h"
 #include "Dungeon.h"
 #include "Game.h"
+#include "Player.h"
 //add actual game director
 //add graphical system/updater
 
@@ -19,5 +20,6 @@ int main()
     //testroom.display();
     Game thing;
     //Kobold steve;
+    thing.Run();
 }
 

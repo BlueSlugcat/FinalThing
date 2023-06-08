@@ -1,4 +1,5 @@
-#pragma once
+#ifndef KOBOLD_H
+#define KOBOLD_H
 #include "Creature.h"
 #include <cmath>
 class Kobold : public Creature
@@ -17,4 +18,5 @@ public:
 	void MoveChoose();
 	friend class Game;
 };
+#endif
 
