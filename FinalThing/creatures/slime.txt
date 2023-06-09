@@ -2,8 +2,8 @@
 0
 sticky
 0
-Gelatinous,oily
-Dlindsight,ignored
+Gelatinous
+blindsight,ignored
 2
 A blob of sentient jelly. Not a real threat by itself, but can cover you in sticky jelly that keeps you from attacking.
 Moves aimlessly unless it detects prey with its blindsight. Ignored by golems, perhaps due to a lack of threat.$

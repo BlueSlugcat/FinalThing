@@ -1,11 +1,11 @@
 #include "Creature.h"
 
 Creature::Creature() : status(true), name ("Creature"),detected(false), target_pos_m({0,0}), hp_current_m(1), hp_max_m(1), attack_m(1), attack_tags_m({"none", "test"}),
-defense_m(0), defense_tags_m({ "none", "test" }), misc_tags_m({ "none" }), description_m("basic test creature"), pos_m({0,0}), sightrange_m(0)
+defense_m(0), defense_tags_m({ "none", "test" }), misc_tags_m({ "none" }), description_m("basic test creature"), pos_m({0,0}), sightrange_m(0), slimed(false)
 {}
 
 Creature::Creature(int hp, int attack, string aTags[], int defense, string dTags[], string mTags[], string descript, int x, int y) : status(true),
-	name("Creature"), detected(false), target_pos_m({ 0,0 }), description_m(descript), sightrange_m(1), pos_m({ x, y })
+	name("Creature"), detected(false), target_pos_m({ 0,0 }), description_m(descript), sightrange_m(1), pos_m({ x, y }), slimed(false)
 { 
 	if (hp <= 0)
 	{
@@ -240,18 +240,15 @@ Creature::~Creature()
 void Creature::Detect() //given I have enough time, I would like to modify Detect for Creature and its Derived classes to have walls block vision 
 {
 	bool flag = false;
-	for (int y = 1; y < (sightrange_m + 1); y++)
+	for (int y = -1 * (sightrange_m + 1); y < sightrange_m; y++)
 	{
-		for (int x = 1; x < sightrange_m + 1; x++)
+		for (int x = -1 * (sightrange_m + 1); x < sightrange_m; x++)
 		{
-			if ((pos_m[0] - x) == target_pos_m[0] && (pos_m[1] - y) == target_pos_m[1])
+			if ((pos_m[0] + x) == target_pos_m[0] && (pos_m[1] + y) == target_pos_m[1])
 			{
 				flag = true;
 			}
-			else if ((pos_m[0] + x) == target_pos_m[0] && (pos_m[1] + y) == target_pos_m[1])
-			{
-				flag = true;
-			}
+			
 		}
 	}
 
@@ -265,6 +262,9 @@ void Creature::Detect() //given I have enough time, I would like to modify Detec
 	}
 }
 
+void Creature::Detect(Creature* scug) {} // here for future golem stuff
+void Creature::SelectTarget() {}
+
 void Creature::Attack(Creature& target)
 {
 	target.TakeDamage(attack_m, attack_tags_m);
@@ -272,7 +272,152 @@ void Creature::Attack(Creature& target)
 
 void Creature::TakeDamage(int attack, vector<string> aTags)
 {
-	int actualdamage = attack - defense_m;
+	bool weakfire = false;
+	bool weakfrost = false;
+	bool weakblunt = false;
+	bool weakpierce = false;
+	bool weakslice = false;
+	bool resistfire = false;
+	bool resistfrost = false;
+	bool resistblunt = false;
+	bool resistpierce = false;
+	bool resistslice = false;
+	float basedamage = attack;
+
+	for (string tag : defense_tags_m)
+	{
+		if (tag == "Gelatinous")
+		{
+			weakfire = true;
+			weakslice = true;
+			resistblunt = true;
+		}
+		else if (tag == "Stoneskin")
+		{
+			weakblunt = true;
+			weakfrost = true;
+			resistslice = true;
+			resistfire = true;
+		}
+		else if (tag == "cold blooded")
+		{
+			weakfrost = true;
+		}
+		else if (tag == "scaled")
+		{
+			weakpierce = true;
+		}
+	}
+	for (string tag : aTags)
+	{
+		if (tag == "sticky") //50% chance for effect to be applied
+		{
+			random_device dev;
+			mt19937 scug(dev());
+			uniform_int_distribution<int> dis(1,10);
+			switch ((dis(scug) > 5))
+			{
+			case true:
+				slimed = true;
+				break;
+			}
+		}
+		else
+		{
+			if (tag == "slice")
+			{
+				switch (weakslice)
+				{
+				case true:
+					basedamage += 3;
+					break;
+				case false:
+					switch (resistslice)
+					{
+					case true:
+						basedamage -= 0.5;
+					}
+					break;
+				}
+				
+			}
+			else if (tag == "blunt")
+			{
+				switch (weakblunt)
+				{
+				case true:
+					basedamage += 3;
+					break;
+				case false:
+					switch (resistblunt)
+					{
+					case true:
+						basedamage -= 3;
+					}
+					break;
+				};
+			}
+			else if (tag == "pierce" && weakpierce == true)
+			{
+				switch (weakpierce)
+				{
+				case true:
+					basedamage += 3;
+					break;
+				case false:
+					switch (resistpierce)
+					{
+					case true:
+						basedamage -= 3;
+					}
+					break;
+				}
+			}
+			else if (tag == "fire")
+			{
+				switch (weakfire)
+				{
+				case true:
+					basedamage *= 2;
+					break;
+				case false:
+					switch (resistfire)
+					{
+					case true:
+						basedamage *= 0.5;
+					}
+					break;
+				default:
+					basedamage += 3;
+				}
+			}
+			else if (tag == "frost")
+			{
+				switch (weakfrost)
+				{
+				case true:
+					basedamage *= 2;
+					break;
+				case false:
+					switch (resistfrost)
+					{
+					case true:
+						basedamage *= 0.5;
+					}
+					break;
+				default:
+					basedamage += 3;
+				}
+			}
+		}
+	}
+
+	if (fmod(basedamage, 1) > .4)
+	{
+		basedamage += 1;
+	}
+	
+	int actualdamage = (int)basedamage - defense_m;
 	if (actualdamage < 0)
 	{
 		actualdamage = 0;
@@ -313,13 +458,40 @@ void Creature::MoveChoose() //basic creatures will wander randomly unless player
 	}
 	else 
 	{
-
-		
-		srand(time(NULL));
-		int xchange = (rand() % 2 - 1);
-		int ychange = (rand() % 2 - 1);
-		requested_pos[0] = pos_m[0] + xchange;
-		requested_pos[1] = pos_m[1] + ychange;
+		random_device dev;//c++11 has a different for random that im very pleased with
+		mt19937 scug(dev());
+		uniform_int_distribution<int> dis(0, 8);
+		int choice = dis(scug);
+		switch (choice)
+		{
+		case 0:
+			requested_pos = { pos_m[0], pos_m[1] };
+			break;
+		case 1:
+			requested_pos = { pos_m[0] + 1, pos_m[1] };
+			break;
+		case 2:
+			requested_pos = { pos_m[0] - 1, pos_m[1] };
+			break;
+		case 3:
+			requested_pos = { pos_m[0], pos_m[1] + 1};
+			break;
+		case 4:
+			requested_pos = { pos_m[0], pos_m[1] - 1 };
+			break;
+		case 5:
+			requested_pos = { pos_m[0] - 1, pos_m[1] + 1};
+			break;
+		case 6:
+			requested_pos = { pos_m[0] + 1, pos_m[1] - 1};
+			break;
+		case 7:
+			requested_pos = { pos_m[0] - 1, pos_m[1] - 1 };
+			break;
+		case 8:
+			requested_pos = { pos_m[0] + 1, pos_m[1] + 1 };
+			break;
+		}
 	}
 
 

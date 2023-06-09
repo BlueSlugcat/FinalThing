@@ -1,8 +1,48 @@
 #include "Game.h"
 
-Game::Game() : idolflag(true), dooropen(false), winflag(false), gameoverflag(false), dungeon(new Dungeon(true)), endflag(false)
+Game::Game() : idolflag(true), dooropen(false), winflag(false), gameoverflag(false), endflag(false)
 {
+	bool flag = true;
+	cout << "Choose Dungeon or press ESC to close game" << endl
+		<< "1. small\n"
+		<< "2. medium\n"
+		<< "3. large (Recommended you increase window size by a little bit\n"
+		<< "4. random\n";
+	while (flag)
+	{
+		switch (_getch())
+		{
+		case 49:
+			flag = false;
+			dungeon = new Dungeon(1);
+			break;
+		case 50:
+			flag = false;
+			dungeon = new Dungeon(2);
+			break;
+		case 51:
+			flag = false;
+			dungeon = new Dungeon(3);
+			break;
+		case 52:
+			flag = false;
+			dungeon = new Dungeon(4);
+			break;
+		case 27:
+			flag = false;
+			endflag = true;
+			break;
+		default:
+			cout << "Invaild, choose from given list" << endl;
+			system("pause");
+		}
+
+
+
+	}
+	
 	PlaceCreatures();
+	Run();
 }
 
 Game::~Game()
@@ -78,8 +118,13 @@ void Game::MovePhase()
 	bool playerloop = true;
 	bool playerattack = false;
 	Player* player = (Player*)activeEntities[0];
+	if (player->slimed)
+	{
+		player->slimed = false;
+	}
 	while (playerloop)
 	{
+
 		player->MoveChoose();
 		if (player->exitflag)
 		{
@@ -111,7 +156,7 @@ void Game::MovePhase()
 				if (dungeon->map[player->requested_pos[1]][player->requested_pos[0]] != '#')
 				{
 					playerloop = false;
-					dungeon->map[player->pos_m[1]][player->pos_m[0]] = '*';
+					dungeon->map[player->pos_m[1]][player->pos_m[0]] = ' ';
 					player->MoveTrue();
 					player_pos = player->pos_m;
 					//add conditionals for items on ground
@@ -124,56 +169,23 @@ void Game::MovePhase()
 			player->requestfail = false;
 		}
 	}
+	
+	
 	if (!endflag)
 	{
 		//npc detect phase
-		i = 0;//will go back and change all for each using an int "iterator" if i have the time
-		for (auto entity : activeEntities)
-		{
-			if (entity->name != "Player")
-			{
-
-				if (entity->name == k || entity->name == ka)
-				{
-					entity->target_pos_m = player_pos;
-					entity->Detect();
-				}
-				if (entity->name == g)
-				{
-					Golem* gtemp = (Golem*)entity;
-					for (auto thing : activeEntities)
-					{
-						if (*&thing != *&entity)
-						{
-							if (thing->name != g)
-							{
-								gtemp->Detect(thing);
-							}
-						}
-					}
-				}
-				else
-				{
-					entity->target_pos_m = player_pos;
-					entity->Detect();
-				}
-
-			}
-			i++;
-		}
-		vector<vector<int>> used;
 		//npc movephase, this is a horrific jumble of code that somehow works, and im not going to even try to get into detail as to how it does
-		bool nogo = false;
 		i = 0;
 		for (Creature* entity : activeEntities)
 		{
 			if (entity->name != player->name)
 			{
 
-				if (entity->name == k || entity->name == ka)
+				if ((entity->name == k || entity->name == ka) && !(entity->slimed))
 				{
 					bool kflag = true;
 					entity->target_pos_m = player_pos;
+					entity->Detect();
 					entity->MoveChoose();
 					for (Creature* thing : activeEntities)
 					{
@@ -188,24 +200,24 @@ void Game::MovePhase()
 					}
 
 
-					if (kflag && dungeon->map[entity->requested_pos[1]][entity->requested_pos[0]] == '*')
+					if (kflag && dungeon->map[entity->requested_pos[1]][entity->requested_pos[0]] == ' ')
 					{
-						dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = '*';
+						dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = ' ';
 						entity->MoveTrue();
 						kflag = false;
 					}
 
-					else if (kflag && dungeon->map[entity->requested_pos[1]][entity->requested_pos[0]] != '*' )
+					else if (kflag && dungeon->map[entity->requested_pos[1]][entity->requested_pos[0]] != ' ' )
 					{
 						bool found = false;
 						for (int x{}; x < 8; x++)
 						{
 							if (x == 6)
 							{
-								if (dungeon->map[entity->pos_m[1] - 1][entity->pos_m[0]] == '*')
+								if (dungeon->map[entity->pos_m[1] - 1][entity->pos_m[0]] == ' ')
 								{
 									entity->requested_pos = { entity->pos_m[0], entity->pos_m[1] - 1 };
-									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = '*';
+									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = ' ';
 									entity->MoveTrue();
 									found = true;
 									break;
@@ -213,10 +225,10 @@ void Game::MovePhase()
 							}
 							else if (x == 2)
 							{
-								if (dungeon->map[entity->pos_m[1] - 1][entity->pos_m[0] - 1] == '*')
+								if (dungeon->map[entity->pos_m[1] - 1][entity->pos_m[0] - 1] == ' ')
 								{
 									entity->requested_pos = { entity->pos_m[0] - 1, entity->pos_m[1] - 1 };
-									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = '*';
+									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = ' ';
 									entity->MoveTrue();
 									found = true;
 									break;
@@ -224,10 +236,10 @@ void Game::MovePhase()
 							}
 							else if (x == 5)
 							{
-								if (dungeon->map[entity->pos_m[1] - 1][entity->pos_m[0] + 1] == '*')
+								if (dungeon->map[entity->pos_m[1] - 1][entity->pos_m[0] + 1] == ' ')
 								{
 									entity->requested_pos = { entity->pos_m[0] + 1, entity->pos_m[1] - 1 };
-									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = '*';
+									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = ' ';
 									entity->MoveTrue();
 									found = true;
 									break;
@@ -235,10 +247,10 @@ void Game::MovePhase()
 							}
 							else if (x == 3)
 							{
-								if (dungeon->map[entity->pos_m[1]][entity->pos_m[0] + 1] == '*')
+								if (dungeon->map[entity->pos_m[1]][entity->pos_m[0] + 1] == ' ')
 								{
 									entity->requested_pos = { entity->pos_m[0] + 1, entity->pos_m[1] };
-									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = '*';
+									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = ' ';
 									entity->MoveTrue();
 									found = true;
 									break;
@@ -247,10 +259,10 @@ void Game::MovePhase()
 
 							else if (x == 7)
 							{
-								if (dungeon->map[entity->pos_m[1]][entity->pos_m[0] - 1] == '*')
+								if (dungeon->map[entity->pos_m[1]][entity->pos_m[0] - 1] == ' ')
 								{
 									entity->requested_pos = { entity->pos_m[0] - 1, entity->pos_m[1] };
-									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = '*';
+									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = ' ';
 									entity->MoveTrue();
 									found = true;
 									break;
@@ -258,10 +270,10 @@ void Game::MovePhase()
 							}
 							else if (x == 0)
 							{
-								if (dungeon->map[entity->pos_m[1] + 1][entity->pos_m[0] - 1] == '*')
+								if (dungeon->map[entity->pos_m[1] + 1][entity->pos_m[0] - 1] == ' ')
 								{
 									entity->requested_pos = { entity->pos_m[0] - 1, entity->pos_m[1] + 1 };
-									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = '*';
+									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = ' ';
 									entity->MoveTrue();
 									found = true;
 									break;
@@ -269,10 +281,10 @@ void Game::MovePhase()
 							}
 							else if (x == 4)
 							{
-								if (dungeon->map[entity->pos_m[1] + 1][entity->pos_m[0] + 1] == '*')
+								if (dungeon->map[entity->pos_m[1] + 1][entity->pos_m[0] + 1] == ' ')
 								{
 									entity->requested_pos = { entity->pos_m[0] + 1, entity->pos_m[1] + 1 };
-									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = '*';
+									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = ' ';
 									entity->MoveTrue();
 									found = true;
 									break;
@@ -280,10 +292,10 @@ void Game::MovePhase()
 							}
 							else if (x == 1)
 							{
-								if (dungeon->map[entity->pos_m[1] + 1][entity->pos_m[0]] == '*')
+								if (dungeon->map[entity->pos_m[1] + 1][entity->pos_m[0]] == ' ')
 								{
 									entity->requested_pos = { entity->pos_m[0], entity->pos_m[1] + 1 };
-									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = '*';
+									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = ' ';
 									entity->MoveTrue();
 									found = true;
 									break;
@@ -301,93 +313,26 @@ void Game::MovePhase()
 
 				}
 
-				else if (entity->name == "Golem")
-				{
-					bool gflag = true;
-					Golem* gtemp = (Golem*)entity;
-					gtemp->MoveChoose();
-					for (Creature* thing : activeEntities)
-					{
-						if (*&gtemp != *&thing && thing->name != "Golem")
-						{
-							if (gtemp->requested_pos == thing->pos_m)
-							{
-								gtemp->Attack(*thing);
-								gflag = false;
-							}
-						}
-					}
-					while (gflag)
-					{
-						gtemp->MoveChoose();
-						if (dungeon->map[gtemp->requested_pos[1]][gtemp->requested_pos[0]] != '#')
-						{
-							dungeon->map[gtemp->pos_m[1]][gtemp->pos_m[0]] = '*';
-							gtemp->MoveTrue();
-							gflag = false;
-						}
-
-						else if (gtemp->detected)
-						{
-							while (gflag)
-							{
-								srand(time(NULL));
-								int xmod = rand() % 1 - 1;
-								srand(time(NULL));
-								int ymod = rand() % 1 - 1;
-								vtemp = { (gtemp->requested_pos[0] + xmod), (gtemp->requested_pos[1] + ymod) };
-								if (vtemp != gtemp->pos_m)
-								{
-									if (dungeon->map[vtemp[1]][vtemp[0]] != '#' && (vtemp[0] - gtemp->pos_m[0] > 1 && vtemp[0] - gtemp->pos_m[0] < -1) && (vtemp[1] - gtemp->pos_m[1] > 1 && vtemp[1] - gtemp->pos_m[1] < -1))
-									{
-
-										for (Creature* thing : activeEntities)
-										{
-											if (*&gtemp != *&thing)
-											{
-												if (gtemp->requested_pos == thing->pos_m)
-												{
-													nogo = true;
-												}
-											}
-										}
-										if (!nogo)
-										{
-											gtemp->requested_pos = vtemp;
-											dungeon->map[gtemp->pos_m[1]][gtemp->pos_m[0]] = '*';
-											gtemp->MoveTrue();
-											gflag = false;
-											used.clear();
-										}
-										else
-										{
-											nogo = false;
-											used.push_back(vtemp);
-										}
-
-									}
-									else if ((vtemp[0] - gtemp->pos_m[0] > 1 && vtemp[0] - gtemp->pos_m[0] < -1) && (vtemp[1] - gtemp->pos_m[1] > 1 && vtemp[1] - gtemp->pos_m[1] < -1))
-									{
-
-										used.push_back(vtemp);
-									}
-								}
-								if (used.size() >= 8)
-								{
-									gtemp->requested_pos = gtemp->pos_m;
-									gtemp->MoveTrue();
-									gflag = false;
-
-								}
-							}
-						}
-					}
-				}
-
-				else
+				else if (!(entity->slimed))
 				{
 					bool sflag = true;
-					entity->target_pos_m = player_pos;
+					if (entity->name != g)
+					{
+						entity->target_pos_m = player_pos;
+						entity->Detect();
+					}
+					else
+					{
+						for (auto scug : activeEntities)
+						{
+							if (scug->name != g)
+							{
+								entity->Detect(scug);
+							}
+						}
+						entity->SelectTarget();
+					}
+					
 					entity->MoveChoose();
 					for (Creature* thing : activeEntities)
 					{
@@ -402,24 +347,24 @@ void Game::MovePhase()
 					}
 
 
-					if (sflag && dungeon->map[entity->requested_pos[1]][entity->requested_pos[0]] == '*')
+					if (sflag && dungeon->map[entity->requested_pos[1]][entity->requested_pos[0]] == ' ')
 					{
-						dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = '*';
+						dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = ' ';
 						entity->MoveTrue();
 						sflag = false;
 					}
 
-					else if (sflag && dungeon->map[entity->requested_pos[1]][entity->requested_pos[0]] == '*' )
+					else if (sflag && dungeon->map[entity->requested_pos[1]][entity->requested_pos[0]] == ' ' )
 					{
 						bool found = false;
 						for (int x{}; x < 8; x++)
 						{
 							if (x == 6)
 							{
-								if (dungeon->map[entity->pos_m[1] - 1][entity->pos_m[0]] == '*')
+								if (dungeon->map[entity->pos_m[1] - 1][entity->pos_m[0]] == ' ')
 								{
 									entity->requested_pos = { entity->pos_m[0], entity->pos_m[1] - 1 };
-									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = '*';
+									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = ' ';
 									entity->MoveTrue();
 									found = true;
 									break;
@@ -427,10 +372,10 @@ void Game::MovePhase()
 							}
 							else if (x == 2)
 							{
-								if (dungeon->map[entity->pos_m[1] - 1][entity->pos_m[0] - 1] == '*')
+								if (dungeon->map[entity->pos_m[1] - 1][entity->pos_m[0] - 1] == ' ')
 								{
 									entity->requested_pos = { entity->pos_m[0] - 1, entity->pos_m[1] - 1 };
-									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = '*';
+									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = ' ';
 									entity->MoveTrue();
 									found = true;
 									break;
@@ -438,10 +383,10 @@ void Game::MovePhase()
 							}
 							else if (x == 5)
 							{
-								if (dungeon->map[entity->pos_m[1] - 1][entity->pos_m[0] + 1] == '*')
+								if (dungeon->map[entity->pos_m[1] - 1][entity->pos_m[0] + 1] == ' ')
 								{
 									entity->requested_pos = { entity->pos_m[0] + 1, entity->pos_m[1] - 1 };
-									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = '*';
+									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = ' ';
 									entity->MoveTrue();
 									found = true;
 									break;
@@ -449,10 +394,10 @@ void Game::MovePhase()
 							}
 							else if (x == 3)
 							{
-								if (dungeon->map[entity->pos_m[1]][entity->pos_m[0] + 1] == '*')
+								if (dungeon->map[entity->pos_m[1]][entity->pos_m[0] + 1] == ' ')
 								{
 									entity->requested_pos = { entity->pos_m[0] + 1, entity->pos_m[1] };
-									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = '*';
+									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = ' ';
 									entity->MoveTrue();
 									found = true;
 									break;
@@ -461,10 +406,10 @@ void Game::MovePhase()
 
 							else if (x == 7)
 							{
-								if (dungeon->map[entity->pos_m[1]][entity->pos_m[0] - 1] == '*')
+								if (dungeon->map[entity->pos_m[1]][entity->pos_m[0] - 1] == ' ')
 								{
 									entity->requested_pos = { entity->pos_m[0] - 1, entity->pos_m[1] };
-									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = '*';
+									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = ' ';
 									entity->MoveTrue();
 									found = true;
 									break;
@@ -472,10 +417,10 @@ void Game::MovePhase()
 							}
 							else if (x == 0)
 							{
-								if (dungeon->map[entity->pos_m[1] + 1][entity->pos_m[0] - 1] == '*')
+								if (dungeon->map[entity->pos_m[1] + 1][entity->pos_m[0] - 1] == ' ')
 								{
 									entity->requested_pos = { entity->pos_m[0] - 1, entity->pos_m[1] + 1 };
-									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = '*';
+									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = ' ';
 									entity->MoveTrue();
 									found = true;
 									break;
@@ -483,10 +428,10 @@ void Game::MovePhase()
 							}
 							else if (x == 4)
 							{
-								if (dungeon->map[entity->pos_m[1] + 1][entity->pos_m[0] + 1] == '*')
+								if (dungeon->map[entity->pos_m[1] + 1][entity->pos_m[0] + 1] == ' ')
 								{
 									entity->requested_pos = { entity->pos_m[0] + 1, entity->pos_m[1] + 1 };
-									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = '*';
+									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = ' ';
 									entity->MoveTrue();
 									found = true;
 									break;
@@ -494,10 +439,10 @@ void Game::MovePhase()
 							}
 							else if (x == 1)
 							{
-								if (dungeon->map[entity->pos_m[1] + 1][entity->pos_m[0]] == '*')
+								if (dungeon->map[entity->pos_m[1] + 1][entity->pos_m[0]] == ' ')
 								{
 									entity->requested_pos = { entity->pos_m[0], entity->pos_m[1] + 1 };
-									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = '*';
+									dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = ' ';
 									entity->MoveTrue();
 									found = true;
 									break;
@@ -513,8 +458,10 @@ void Game::MovePhase()
 					}
 				}
 			}
+			Sleep(50);
 		}
 	}
+	
 }
 
 
@@ -531,9 +478,9 @@ void Game::MovePhase()
 	{
 		if (entity != *&player)
 		{
-			if (!(entity->status))
+			if (!(entity->status) && entity->name != "Player")
 			{
-				dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = '*';
+				dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = ' ';
 				
 				list.insert(list.begin(), i);
 			}
@@ -543,13 +490,18 @@ void Game::MovePhase()
 
 	for (int index : list)
 	{
-		activeEntities.erase(activeEntities.begin() + index-1);
+		activeEntities.erase(activeEntities.begin() + index);
 		activeEntities.shrink_to_fit();
 	}
 }
 
 void Game::UpdateScreen()
 {
+	system("cls");
+	cout << "\nHP: " << activeEntities[0]->hp_current_m << "/" << activeEntities[0]->hp_max_m << endl;
+	
+	bool gflag = false;
+	vector<int> temppos;
 	Player* player = (Player*)activeEntities[0];
 	dungeon->map[player->pos_m[1]][player->pos_m[0]] = '@';
 	for (Creature* entity : activeEntities)
@@ -571,6 +523,8 @@ void Game::UpdateScreen()
 			else if (entity->name == "Golem")
 			{
 				dungeon->map[entity->pos_m[1]][entity->pos_m[0]] = 'G';
+				gflag = true;
+				temppos = entity->target_pos_m;
 			}
 			else
 			{
@@ -578,13 +532,9 @@ void Game::UpdateScreen()
 			}
 		}
 	}
-
-	system("cls");
+	
 	dungeon->display();
-	for (auto thing : activeEntities)
-	{
-		cout << thing->hp_current_m << endl;
-	}
+	
 	
 }
 
@@ -598,8 +548,10 @@ void Game::Run()
 		if (gameoverflag == true)
 		{
 			endflag = true;
+			system("cls");
+			cout << "Game Over, you died" << endl;
+			system("pause");
 		}
-		
 	}
 	system("cls");
 	cout << "Ending" << endl;

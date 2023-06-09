@@ -5,11 +5,15 @@
 #include "Kobold.h"
 #include "Golem.h"
 #include "Slime.h"
+using std::cin;
 
 class Game
 {
 protected:
-	vector<vector<int>> tile_replace_list;
+	vector<string>weaponCatalog;
+	vector<string>healthCatalog;
+	vector<string>armorCatalog;
+	vector<Item*> activeItems;
 	bool endflag;
 	bool idolflag;
 	bool dooropen;

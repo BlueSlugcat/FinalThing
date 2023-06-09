@@ -26,7 +26,7 @@ Dungeon::Dungeon()
 		temp.str(string());
 		temp.clear();
 		tok.clear();
-		map = new char*[truesizey];
+		map = new char* [truesizey];
 		for (int i{}; i < truesizey; i++)
 		{
 			map[i] = new char[truesizex + 1];
@@ -49,12 +49,15 @@ Dungeon::Dungeon()
 
 }
 
-Dungeon::Dungeon(bool game)
+Dungeon::Dungeon(int game)
 {
-	//actual map is randomly chosen from 3 prebuilt dungeons
-	srand(time(NULL));
-	int result = rand() % 3 + 1;
 	string filename;
+	int result = game;
+	if (result == 4)
+	{
+		srand(time(NULL));
+		result = rand() % 3 + 1;
+	}
 	if (result == 1)
 	{
 		filename = "truedungeon.txt";

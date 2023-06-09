@@ -127,23 +127,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Armor.cpp" />
     <ClCompile Include="Creature.cpp" />
     <ClCompile Include="Dungeon.cpp" />
     <ClCompile Include="FinalThing.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Golem.cpp" />
+    <ClCompile Include="Healitem.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="Kobold.cpp" />
+    <ClCompile Include="List.cpp" />
+    <ClCompile Include="Node.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Slime.cpp" />
+    <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Armor.h" />
     <ClInclude Include="Creature.h" />
     <ClInclude Include="Dungeon.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Golem.h" />
+    <ClInclude Include="Healitem.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="Kobold.h" />
+    <ClInclude Include="List.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Slime.h" />
+    <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="creatures\golem.txt" />
@@ -151,6 +163,7 @@
     <Text Include="creatures\Player.txt" />
     <Text Include="creatures\slime.txt" />
     <Text Include="creatures\testcreature.txt" />
+    <Text Include="itemcatalog.txt" />
     <Text Include="testroom.txt" />
     <Text Include="testroom2.txt" />
     <Text Include="testroom3.txt" />

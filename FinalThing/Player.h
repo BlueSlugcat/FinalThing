@@ -7,6 +7,10 @@
 #include <conio.h>
 #include <dos.h>
 #include <time.h>
+#include "List.h"
+#include "Item.h"
+#include "Weapon.h"
+#include "Armor.h"
 
 #define ESC 27
 #define UP 72
@@ -18,12 +22,17 @@ class Player : public Creature
 protected:
 	bool exitflag;
 	bool requestfail;
+	List<Item> inventory;
+	Weapon* equippedWeapon;
+	Armor* equippedArmor;
+
 public: 
 	Player();
 	Player(int x, int y);
 	~Player();
 	void MoveChoose();
-	//void detect(); //used here in order to negate its effect for the player
+	void Attack(Creature& target);
+	void TakeDamage(int attack, vector<string> atags);
 	friend class Game;
 
 };

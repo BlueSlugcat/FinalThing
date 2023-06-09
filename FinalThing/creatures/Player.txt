@@ -1,7 +1,7 @@
-5
-2
+15
+1
 Fists,blunt
-2
+1
 cloth
 normal
 0

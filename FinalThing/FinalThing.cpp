@@ -20,6 +20,5 @@ int main()
     //testroom.display();
     Game thing;
     //Kobold steve;
-    thing.Run();
 }
 

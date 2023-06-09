@@ -31,7 +31,7 @@ protected:
 public:
 	//this class will hold little to no manager functions do to them not being needed for its intended purpose
 	Dungeon();//basic testroom build
-	Dungeon(bool game);//actual game map build
+	Dungeon(int game);//actual game map build
 	//Dungeon& update(vector<Creature> entities);
 	~Dungeon();
 	void display();
