@@ -1,12 +1,12 @@
 #include "Player.h"
 
-Player::Player() :Creature("Player.txt", 1, 1), exitflag(false) ,equippedWeapon(nullptr), equippedArmor(nullptr)
+Player::Player() :Creature("Player.txt", 1, 1), exitflag(false) ,equippedWeapon(nullptr), equippedArmor(nullptr), healitemnum(0)
 {
 	name = "Player";
 	
 }
 
-Player::Player(int x, int y) :Creature("Player.txt", x, y) , exitflag(false), equippedWeapon(nullptr), equippedArmor(nullptr)
+Player::Player(int x, int y) :Creature("Player.txt", x, y) , exitflag(false), equippedWeapon(nullptr), equippedArmor(nullptr), healitemnum(0)
 {
 	name = "Player";
 	

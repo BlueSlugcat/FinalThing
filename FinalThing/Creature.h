@@ -26,7 +26,7 @@ protected:
 	bool slimed;
 	bool status; //true = alive, false = dead
 	string name;
-	vector<int> requested_pos; //if i understood multithreading better i would have likes to have done mid function requests to the directior for a much more 
+	vector<int> requested_pos; //if i understood multithreading better i would have liked to have done mid function requests to the directior
 	bool detected;
 	vector<int> target_pos_m;
 	int hp_current_m;

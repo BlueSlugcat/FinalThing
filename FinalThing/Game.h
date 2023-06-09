@@ -29,8 +29,8 @@ public:
 	void MovePhase();
 	void DeadCheck();
 	void PlaceCreatures();
+	//void PlaceItems();
 	//void WinCheck();
-	//void GameOverCheck();
 	//void IdolCheck();
 	void Run();
 };

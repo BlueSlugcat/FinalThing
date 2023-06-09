@@ -11,6 +11,7 @@
 #include "Item.h"
 #include "Weapon.h"
 #include "Armor.h"
+#include "Healitem.h"
 
 #define ESC 27
 #define UP 72
@@ -22,6 +23,7 @@ class Player : public Creature
 protected:
 	bool exitflag;
 	bool requestfail;
+	int healitemnum;
 	List<Item> inventory;
 	Weapon* equippedWeapon;
 	Armor* equippedArmor;

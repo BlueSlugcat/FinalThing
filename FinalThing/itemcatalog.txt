@@ -20,4 +20,7 @@ heal,*Potion*,10
 heal,Strange Mushroom,2
 heal,Beverage,3
 heal,Almost Empty Potion,2
+heal,Bandage,6
+heal,Painkiller,1
+heal,???,5
 
