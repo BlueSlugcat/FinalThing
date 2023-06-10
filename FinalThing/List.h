@@ -1,6 +1,6 @@
 #ifndef LIST_H
 #define LIST_H
-#include "Node.h"
+#include "Node.cpp"
 template <class T>
 class List
 {
@@ -15,14 +15,11 @@ public:
 	List<T>& operator = (const List<T>& rhs);
 	List<T>& operator = (List<T>&& rhs) noexcept;
 	~List();
-	void Clear();
-	void Prepend(T data);
 	void Append(T data);
-	void Insert(int pos, T data);
 	bool finditem(T target);
 	void incrementQ(T target);
 	void DeleteData(T target);
-	void Display();
+	friend class Player;
 };
 
 #endif

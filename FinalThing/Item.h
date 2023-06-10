@@ -27,9 +27,14 @@ protected:
 public:
 	Item();
 	Item(string name, string what, vector<int> pos);
+	Item(const Item& thing);
 	virtual ~Item();
 	vector<int> ReturnPos();
-
+	string ReturnName();
+	friend class Game;
+	friend class Player;
+	template <class t>
+	friend class Node;
 };
 
 #endif

@@ -32,6 +32,7 @@ public:
 	Node<T>* getPrev();
 	template <class t>
 	friend class List;
+	friend class Player;
 };
 #endif
 

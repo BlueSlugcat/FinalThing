@@ -20,19 +20,20 @@ using std::string;
 using std::vector;
 using std::fstream;
 using std::stringstream; 
+using std::to_string;
 class Dungeon
 {
 protected:
-	
-	size_t truesizex;
-	size_t truesizey;
+	int type;
+	int truesizex;
+	int truesizey;
 	char** map;
 	
 public:
 	//this class will hold little to no manager functions do to them not being needed for its intended purpose
 	Dungeon();//basic testroom build
-	Dungeon(int game);//actual game map build
-	//Dungeon& update(vector<Creature> entities);
+	Dungeon(int game, bool thing);//actual game map build
+	Dungeon(int ver);
 	~Dungeon();
 	void display();
 	friend class Game;

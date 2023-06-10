@@ -171,6 +171,7 @@
     <Text Include="dungeon\truedungeon.txt" />
     <Text Include="dungeon\truedungeon2.txt" />
     <Text Include="dungeon\truedungeon3.txt" />
+    <Text Include="truebase1.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

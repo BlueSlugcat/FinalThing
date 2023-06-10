@@ -12,6 +12,7 @@ public:
 	~Armor();
 	int ReturnDef();
 	vector<string> ReturnTags();
+	friend class Player;
 };
 #endif
 

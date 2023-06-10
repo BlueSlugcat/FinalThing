@@ -12,5 +12,6 @@ public:
 	~Weapon();
 	vector<string> ReturnTags();
 	int ReturnAttack();
+	friend class Player;
 };
 #endif

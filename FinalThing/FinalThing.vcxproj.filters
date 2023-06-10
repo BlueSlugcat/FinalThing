@@ -18,9 +18,6 @@
     <ClCompile Include="FinalThing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Creature.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Dungeon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -56,6 +53,9 @@
     </ClCompile>
     <ClCompile Include="Healitem.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Creature.cpp">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -113,5 +113,6 @@
     <Text Include="creatures\slime.txt" />
     <Text Include="creatures\Player.txt" />
     <Text Include="itemcatalog.txt" />
+    <Text Include="truebase1.txt" />
   </ItemGroup>
 </Project>

@@ -265,9 +265,9 @@ void Creature::Detect() //given I have enough time, I would like to modify Detec
 void Creature::Detect(Creature* scug) {} // here for future golem stuff
 void Creature::SelectTarget() {}
 
-void Creature::Attack(Creature& target)
+void Creature::Attack(Creature* target)
 {
-	target.TakeDamage(attack_m, attack_tags_m);
+	target->TakeDamage(attack_m, attack_tags_m);
 }
 
 void Creature::TakeDamage(int attack, vector<string> aTags)

@@ -5,15 +5,18 @@
 #include "Kobold.h"
 #include "Golem.h"
 #include "Slime.h"
-using std::cin;
+using std::ofstream;
 
 class Game
 {
 protected:
+	vector<int> idolpos;
+	vector<int>exitpos;
 	vector<string>weaponCatalog;
 	vector<string>healthCatalog;
 	vector<string>armorCatalog;
 	vector<Item*> activeItems;
+	string hitplayerlast;
 	bool endflag;
 	bool idolflag;
 	bool dooropen;
@@ -24,15 +27,15 @@ protected:
 	Dungeon* dungeon;
 public:
 	Game();
+	Game(int);
 	~Game();
 	void UpdateScreen();
 	void MovePhase();
 	void DeadCheck();
-	void PlaceCreatures();
-	//void PlaceItems();
-	//void WinCheck();
-	//void IdolCheck();
+	void PlaceObjects();
+	void FillCatalog();
 	void Run();
+	void Save();
 };
 #endif
 

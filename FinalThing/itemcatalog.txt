@@ -1,20 +1,20 @@
 weapon,Longsword,5,slice
-weapon,Mace,6,blunt
+weapon,Mace,5,blunt
 weapon,Dagger,3,pierce
 weapon,Shortsword,4,slice
 weapon,Club,4,blunt
-weapon,Spear,6,pierce
-weapon,Greatsword,6,slice
+weapon,Spear,5,pierce
+weapon,Greatsword,5,slice
 weapon,Stick,3,blunt
 weapon,Torch,2,blunt,fire
-weapon,*Freezing Shortsword*,4,slicing,frost
-weapon,*Fire Spear*,5,pierce,fire
-weapon,*Morning Star*,7,blunt,pierce,fire
+weapon,*Freezing Shortsword*,6,slice,frost
+weapon,*Fire Spear*,7,pierce,fire
+weapon,*Morning Star*,8,blunt,pierce,fire
 armor,Cloak,2,cloth
 armor,Leather Pads,3,leather
 armor,Chain Mail,4,mail
 armor,Steel Plate,6,solid
-armor,Enchanted Plate,5,solid,nullifying
+armor,Enchanted Plate,7,solid,nullifying
 heal,Burger,4
 heal,*Potion*,10
 heal,Strange Mushroom,2

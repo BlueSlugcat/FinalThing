@@ -38,6 +38,7 @@ void Kobold::SelectLeader(vector<vector<int*>> alphaPos)
 		}
 		i++;
 	}
+	leader_pos.clear();
 	leader_pos.resize(2);
 	leader_pos[0] = *&alphaPos[closest][0];
 	leader_pos[1] = *&alphaPos[closest][1];
@@ -166,5 +167,6 @@ void Kobold::MoveChoose()
 
 Kobold::~Kobold()
 {
+	leader_pos.clear();
 	cout << "Kobold Dtor" << endl;
 }

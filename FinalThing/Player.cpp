@@ -1,21 +1,21 @@
 #include "Player.h"
 
-Player::Player() :Creature("Player.txt", 1, 1), exitflag(false) ,equippedWeapon(nullptr), equippedArmor(nullptr), healitemnum(0)
+Player::Player() :Creature("Player.txt", 1, 1), exitflag(false) ,equippedWeapon(nullptr), equippedArmor(nullptr), healitemnum(0), inventory(List<Item*>()), saveflag(false)
 {
 	name = "Player";
 	
 }
 
-Player::Player(int x, int y) :Creature("Player.txt", x, y) , exitflag(false), equippedWeapon(nullptr), equippedArmor(nullptr), healitemnum(0)
+Player::Player(int x, int y) :Creature("Player.txt", x, y) , exitflag(false), equippedWeapon(nullptr), equippedArmor(nullptr), healitemnum(0), inventory(List<Item*>()), saveflag(false)
 {
 	name = "Player";
+
 	
 }
 
 Player::~Player()
 {
 	cout << "Player Dtor" << endl;
-
 }
 
 void Player::MoveChoose()
@@ -28,46 +28,46 @@ void Player::MoveChoose()
 	switch (buffer)
 	{
 	case ESC:
-		cout << "ESC" << endl;
 		exitflag = true;
 		break;
 	case UP:
 		requested_pos[1] = (pos_m[1] - 1);
 		requested_pos[0] = pos_m[0];
-		cout << "UP" << endl;
 		break;
 	case LEFT:
 		requested_pos[0] = pos_m[0] - 1;
 		requested_pos[1] = pos_m[1];
-		cout << "LEFT" << endl;
 		break;
 	case RIGHT:
 		requested_pos[0] = pos_m[0] + 1;
 		requested_pos[1] = pos_m[1];
-		cout << "RIGHT" << endl;
 		break;
 	case DOWN:
 		requested_pos[1] = pos_m[1] + 1;
 		requested_pos[0] = pos_m[0];
-		cout << "DOWN" << endl;
+		break;
+	case H:
+		healflag = true;
+		break;
+	case S:
+		saveflag = true;
 		break;
 	default:
 		requestfail = true;
-		cout << "FAIL" << endl;
 		break;
 
 	}
 }
 
-void Player::Attack(Creature& target)
+void Player::Attack(Creature* target)
 {
 	switch ((equippedWeapon == nullptr))
 	{
-	case true:
-		target.TakeDamage(attack_m + equippedWeapon->ReturnAttack(), equippedWeapon->ReturnTags());
-		break;
 	case false:
-		target.TakeDamage(attack_m, attack_tags_m);
+		target->TakeDamage(attack_m + equippedWeapon->ReturnAttack(), equippedWeapon->ReturnTags());
+		break;
+	case true:
+		target->TakeDamage(attack_m, attack_tags_m);
 		break;
 	}
 }
@@ -92,8 +92,10 @@ void Player::TakeDamage(int attack, vector<string> aTags)
 	{
 	case true:
 		tempdef = defense_tags_m;
+		break;
 	case false:
-		tempdef = equippedArmor->ReturnTags();
+		tempdef =  equippedArmor->tags_m;
+		break;
 	}
 
 	for (string tag : tempdef)
@@ -164,7 +166,7 @@ void Player::TakeDamage(int attack, vector<string> aTags)
 					switch (resistslice)
 					{
 					case true:
-						basedamage -= 0.5;
+						basedamage *= 0.5;
 					}
 					break;
 				}
@@ -256,4 +258,96 @@ void Player::TakeDamage(int attack, vector<string> aTags)
 	{
 		hp_current_m -= actualdamage;
 	}
+}
+
+void Player::InventoryCheck()
+{
+	int temphealitem{};
+	Node<Item*>* temp = inventory.m_head;
+	while (temp != nullptr)
+	{
+		if (temp->item->type == "heal")
+		{
+			temphealitem++;
+		}
+		else if (temp->item->type == "weapon")
+		{
+			
+			if (equippedWeapon != nullptr && ((Weapon*)(temp->item))->attackval_m > equippedWeapon->attackval_m)
+			{
+				equippedWeapon = (Weapon*)(temp->item);
+			}
+			else if (equippedWeapon == nullptr)
+			{
+				equippedWeapon = (Weapon*)(temp->item);
+			}
+		}
+		else if (temp->item->type == "armor")
+		{
+			if (equippedArmor != nullptr && ((Armor*)(temp->item))->defval_m > equippedArmor->defval_m)
+			{
+				equippedArmor = (Armor*)(temp->item);
+			}
+			else if (equippedArmor == nullptr)
+			{
+				equippedArmor = (Armor*)(temp->item);
+			}
+		}
+
+		temp = temp->m_next;
+	}
+	healitemnum = temphealitem;
+}
+
+void Player::Heal()
+{
+	Node<Item*>* temp = inventory.m_head;
+	switch (healitemnum > 0)
+	{
+	case true:
+		switch (hp_current_m == hp_max_m)
+		{
+		case false:
+				while (temp != nullptr)
+				{
+					if (temp->item->type == "heal")
+					{
+						healitemnum--;
+						switch ((((Healitem*)(temp->item))->ReturnHeal() + hp_current_m) > hp_max_m)
+						{
+						case true:
+							hp_current_m = hp_max_m;
+							break;
+						case false:
+							hp_current_m += ((Healitem*)(temp->item))->ReturnHeal();
+							break;
+						}
+						system("cls");
+						cout << "Used " << temp->item->title << " and healed " << ((Healitem*)(temp->item))->ReturnHeal() << " points\n";
+						inventory.DeleteData(temp->item);
+						system("pause");
+						break;
+					}
+					temp = temp->m_next;
+				}
+				break;
+		case true:
+			system("cls");
+			cout << "You are already at full health" << endl;
+			system("pause");
+			break;
+		}
+		break;
+	case false:
+		system("cls");
+		cout << "You do not have any healing items" << endl;
+		system("pause");
+		break;
+
+	}
+	
+
+
+	
+	
 }

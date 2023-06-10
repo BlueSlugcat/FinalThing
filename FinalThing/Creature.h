@@ -50,10 +50,10 @@ public:
 	virtual ~Creature();
 	virtual void Detect();
 	virtual void Detect(Creature* scug);
-	virtual void Attack(Creature& target);
+	virtual void Attack(Creature* target);
 	virtual void TakeDamage(int attack, vector<string> aTags);
 	virtual void MoveChoose();//determines next move, seperated from actually applying it so the game director can check the requested position
-							  // then approve/deny the request(and re-run the function) or tell the creature to attack if the player/a hostile creature is in that position 
+							// then approve/deny the request(and re-run the function) or tell the creature to attack if the player/a hostile creature is in that position 
 	virtual void MoveTrue();
 	void Describe();
 	void ShowTags();

@@ -1,0 +1,5 @@
+1
+4
+bold Alphaiting4
+ Press (h) to heal | press (s) to save
+ Current Weapon: ÝÑö
